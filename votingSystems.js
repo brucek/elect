@@ -381,6 +381,18 @@ function singleTransferrableVote(votes, candidates, maxWinners) {
 }
 
 
+function powerInstantRunoff(votes, candidates, maxWinners) {
+
+    var winners = singleTransferrableVote(votes, candidates, Math.max(3, maxWinners));
+
+    return winners;
+
+    // if (maxWinner >= 3) return winners;
+
+
+}
+
+
 module.exports = {
     random: {
         '':function(votes, candidates, maxWinners) {
@@ -483,6 +495,9 @@ module.exports = {
     },
     singleTransferableVote: {
         '':singleTransferrableVote
+    },
+    powerInstantRunoff: {
+        '':powerInstantRunoff
     },
     directRepresentativeRanked: {
         '15% Threshold': {'':fractionalRepresentativeRankedVote(.15)},
