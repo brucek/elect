@@ -384,9 +384,23 @@ function singleTransferrableVote(votes, candidates, maxWinners) {
 // Honestly this will only return maxWinners = 1 no matter what right now
 function powerInstantRunoff(votes, candidates, maxWinners) {
 
-    var topWinners = singleTransferrableVote(votes, candidates, Math.max(4, maxWinners + 1));
+    // var topWinners = singleTransferrableVote(votes, candidates, Math.max(4, maxWinners + 1));
+    var topWinners = singleTransferrableVote(votes, candidates, 5);
 
-    if (maxWinners == topWinners.length) return topWinners;
+    // console.log(topWinners);
+
+    if (maxWinners == topWinners.length || topWinners.length <= 1) return topWinners;
+
+    if (topWinners.length == 2) {
+        topWinners[2] = {
+            index: topWinners[0].index,
+            weight: 1,
+            preferences: topWinners[0].preferences
+        };
+    }
+
+    // Just in case
+    topWinners.slice(0, 3);
 
     // Find Condorcet / weighted winner
 
@@ -431,7 +445,7 @@ function powerInstantRunoff(votes, candidates, maxWinners) {
     // returns the winner index if there is a Condorcet winner, else null
     function findCondorcetWinner(voteMap) {
 
-        console.log(voteMap);
+        // console.log(voteMap);
 
         var cWinner = null;
         var keys = Object.keys(voteMap);
@@ -446,12 +460,12 @@ function powerInstantRunoff(votes, candidates, maxWinners) {
         return cWinner;
     }
 
-    console.log(countedVotes);
+    // console.log(countedVotes);
 
     // Check for Condorcet winner
     var finalWinner = findCondorcetWinner(countedVotes);
 
-    console.log(finalWinner);
+    // console.log(finalWinner);
 
     // If no winner use the highest count(s)
     if (!finalWinner) {
@@ -467,7 +481,7 @@ function powerInstantRunoff(votes, candidates, maxWinners) {
 
     var ret = topWinners.filter(x => { return finalWinner.indexOf(x.index) >= 0 });
 
-    console.log(ret);
+    // console.log(ret);
 
     return ret;
 }

@@ -50,13 +50,13 @@ var Election = module.exports = proto(function() {
             return strategy(voter, voterAggregates)
         }.bind(this))
 
-        console.log(votes);
-        console.log(candidates);
+        // console.log(votes);
+        // console.log(candidates);
 
         var results = algorithm(votes, candidates, maxWinners);
 
-        console.log(votes);
-        console.log(results);
+        // console.log(votes);
+        // console.log(results);
 
         results.forEach(function(winner) {
             winner.preferences = candidates[winner.index]
