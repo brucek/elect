@@ -260,6 +260,7 @@ function fractionalRepresentativeRankedVote(threshold) {
 }
 
 function singleTransferrableVote(votes, candidates, maxWinners) {
+
     var seats = maxWinners
     var voteQuota = 1+votes.length/(seats+1)
 
@@ -380,16 +381,95 @@ function singleTransferrableVote(votes, candidates, maxWinners) {
     return finalWinners
 }
 
-
+// Honestly this will only return maxWinners = 1 no matter what right now
 function powerInstantRunoff(votes, candidates, maxWinners) {
 
-    var winners = singleTransferrableVote(votes, candidates, Math.max(3, maxWinners));
+    var topWinners = singleTransferrableVote(votes, candidates, Math.max(4, maxWinners + 1));
 
-    return winners;
+    if (maxWinners == topWinners.length) return topWinners;
 
-    // if (maxWinner >= 3) return winners;
+    // Find Condorcet / weighted winner
 
+    // map of result counts for candidate vs each of the others
+    var newVotesMap = function() {
+        var votesList = {
+            [topWinners[0].index]: {[topWinners[1].index]: 0,[topWinners[2].index]: 0 },
+            [topWinners[1].index]: {[topWinners[0].index]: 0,[topWinners[2].index]: 0 },
+            [topWinners[2].index]: {[topWinners[0].index]: 0,[topWinners[1].index]: 0 },
+        }
+        return votesList
+    }
 
+    var countedVotes = newVotesMap(), currentWinner = null, topCount = 0;
+
+    for (var i=0; i<topWinners.length, i++;) {
+        var iIndex = topWinners[i].index;
+        for (var j=0; j<topWinners.length, j++;) {
+            if (i == j) continue;
+            var jIndex = topWinners[j].index;
+
+            votes.forEach(function(vote) {
+                // See who is earlier in the vote sequence
+                // Do we want to test for -1?
+                if (vote.indexOf(iIndex) < vote.indexOf(jIndex)) {
+                    // voter ranked candidate i ahead of j
+                    if(++countedVotes[iIndex][jIndex] >= topCount) {
+                       topCount = countedVotes[iIndex][jIndex];
+                        currentWinner = iIndex;
+                    }
+                } else {
+                    // voter ranked candidate j ahead of i
+                    if(++countedVotes[jIndex][iIndex] >= topCount) {
+                        topCount = countedVotes[jIndex][iIndex];
+                        currentWinner = jIndex;
+                    }
+                }
+            })
+        }
+    }
+
+    // returns the winner index if there is a Condorcet winner, else null
+    function findCondorcetWinner(voteMap) {
+
+        console.log(voteMap);
+
+        var cWinner = null;
+        var keys = Object.keys(voteMap);
+        for (var i=0; i<3; i++) {
+            if (voteMap[keys[0]][keys[1]] > voteMap[keys[1]][keys[0]] &&
+                voteMap[keys[0]][keys[2]] > voteMap[keys[2]][keys[0]]) {
+                cWinner = [key];
+                break;
+            }
+            keys.push(keys.shift());
+        }
+        return cWinner;
+    }
+
+    console.log(countedVotes);
+
+    // Check for Condorcet winner
+    var finalWinner = findCondorcetWinner(countedVotes);
+
+    console.log(finalWinner);
+
+    // If no winner use the highest count(s)
+    if (!finalWinner) {
+        finalWinner = [];
+        for (const [index, value] of Object.entries(countedVotes)) {
+            {
+                if (Object.values(value).indexOf(topCount) >= 0) {
+                    finalWinner.push(index);
+                }
+            }
+        }
+    }
+
+    var ret = topWinners.filter(x => { return finalWinner.indexOf(x.index) >= 0 });
+
+    console.log(ret);
+
+    return ret;
 }
 
 
