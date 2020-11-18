@@ -109,6 +109,7 @@ While you can create your own, there are a number of built-in voting systems:
 * `elect.systems.plurality` - [Plurality voting system](https://en.wikipedia.org/wiki/Plurality_voting_system)
 * `elect.systems.range` - [Range voting system](https://en.wikipedia.org/wiki/Range_voting)
 * `elect.systems.singleTransferableVote` - [STV voting system](https://en.wikipedia.org/wiki/Single_transferable_vote)
+* `elect.systems.powerInstantRunoff` - [Power IRV system](https://brucek.github.io/wip/power-irv.html)
 * `elect.systems.directRepresentativeRanked` - A proportional representation method using ranked voting.
   * `elect.systems.directRepresentativeRanked['15% Threshold']`
 * `elect.systems.directRepresentativeRanged` - A proportional representation method using scored voting.

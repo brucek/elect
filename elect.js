@@ -13,70 +13,77 @@ var ballots = exports.ballots = require('./ballots')
         // preferences - the winner's voting preferences for each societal option
 // each strategy:
     // returns a "vote", a set of data used by votingSystem to determine winners
-// exports.testSystems = {
-//     'Power Instant Runoff': {
-//         winners: [1,3],
-//         strategies: strat.ranked,
-//         ballots: ballots.ranked,
-//         systems: systems.powerInstantRunoff
-//     },
-// }
-
 exports.testSystems = {
-    Random: {
-        winners: [1,3],
-        strategies: strat.noop,
-        systems: systems.random
-    },
-    'Random Voters\' Choice': {
-        winners: [1,3],
-        strategies: strat.ranked,
-        ballots: ballots.ranked,
-        systems: systems.randomVotersChoice
-    },
-    Plurality: {
-        winners: [1,3],
-        strategies: strat.ranked,
-        ballots: ballots.ranked,
-        systems: systems.plurality
-    },
-    Range: {
-        winners: [1,3],
-        strategies: strat.scored,
-        systems: systems.scored,
-        ballots: ballots.scored
-    },
-    'Single-Transferable Vote': {
-        winners: [1,3],
-        strategies: strat.ranked,
-        ballots: ballots.ranked,
-        systems: systems.singleTransferableVote
-    },
     'Power Instant Runoff': {
-        winners: [1,3],
+        winners: [1],
         strategies: strat.ranked,
         ballots: ballots.ranked,
         systems: systems.powerInstantRunoff
     },
-    'Proportional Ranked, 15-Percent Threshold': {
-        winners: [3],//[1,3],
-        strategies: strat.ranked,
-        ballots: ballots.ranked,
-        systems: systems.singleTransferableVote
-    },
-    'Proportional Ranged': {
-        winners: [3, Infinity],//[1,3, Infinity],
-        strategies: strat.scored,
-        ballots: ballots.scored,
-        systems: {
-            'split-weight, 0% threshold': systems.directRepresentativeRanged['split-weight, 0% threshold'],
-            'highest-weight, 20% threshold': systems.directRepresentativeRanged['highest-weight, 20% threshold'],
-            'split-weight, minority-max, 20% threshold': systems.directRepresentativeRanged['split-weight, minority-max, 20% threshold'],
-            'split-weight, <b>reweighted</b>': systems.directRepresentativeRanged['split-weight, <b>reweighted</b>'],
-            'equal-weight, <b>reweighted</b>': systems.directRepresentativeRanged['split-weight, <b>reweighted</b>'],
-        }
-    },
 }
+
+// exports.testSystems = {
+//     Random: {
+//         // winners: [1,3],
+//         winners: [1],
+//         strategies: strat.noop,
+//         systems: systems.random
+//     },
+//     'Random Voters\' Choice': {
+//         // winners: [1,3],
+//         winners: [1],
+//         strategies: strat.ranked,
+//         ballots: ballots.ranked,
+//         systems: systems.randomVotersChoice
+//     },
+//     Plurality: {
+//         // winners: [1,3],
+//         winners: [1],
+//         strategies: strat.ranked,
+//         ballots: ballots.ranked,
+//         systems: systems.plurality
+//     },
+//     Range: {
+//         // winners: [1,3],
+//         winners: [1],
+//         strategies: strat.scored,
+//         systems: systems.scored,
+//         ballots: ballots.scored
+//     },
+//     'Single-Transferable Vote': {
+//         // winners: [1,3],
+//         winners: [1],
+//         strategies: strat.ranked,
+//         ballots: ballots.ranked,
+//         systems: systems.singleTransferableVote
+//     },
+//     'Power Instant Runoff': {
+//         winners: [1],
+//         strategies: strat.ranked,
+//         ballots: ballots.ranked,
+//         systems: systems.powerInstantRunoff
+//     },
+//     'Proportional Ranked, 15-Percent Threshold': {
+//         // winners: [3],//[1,3],
+//         winners: [1],
+//         strategies: strat.ranked,
+//         ballots: ballots.ranked,
+//         systems: systems.singleTransferableVote
+//     },
+//     'Proportional Ranged': {
+//         // winners: [3, Infinity],//[1,3, Infinity],
+//         winners: [1],
+//         strategies: strat.scored,
+//         ballots: ballots.scored,
+//         systems: {
+//             'split-weight, 0% threshold': systems.directRepresentativeRanged['split-weight, 0% threshold'],
+//             'highest-weight, 20% threshold': systems.directRepresentativeRanged['highest-weight, 20% threshold'],
+//             'split-weight, minority-max, 20% threshold': systems.directRepresentativeRanged['split-weight, minority-max, 20% threshold'],
+//             'split-weight, <b>reweighted</b>': systems.directRepresentativeRanged['split-weight, <b>reweighted</b>'],
+//             'equal-weight, <b>reweighted</b>': systems.directRepresentativeRanged['split-weight, <b>reweighted</b>'],
+//         }
+//     },
+// }
 
 exports.test = function(resultsDiv, options, votingSystems) {
     if(votingSystems === undefined) throw new Error("No voting systems to test")

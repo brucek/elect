@@ -400,7 +400,8 @@ function powerInstantRunoff(votes, candidates, maxWinners) {
     }
 
     // Just in case
-    topWinners.slice(0, 3);
+    topWinners = topWinners.slice(0, 3);
+
 
     // Find Condorcet / weighted winner
 
@@ -411,20 +412,36 @@ function powerInstantRunoff(votes, candidates, maxWinners) {
             [topWinners[1].index]: {[topWinners[0].index]: 0,[topWinners[2].index]: 0 },
             [topWinners[2].index]: {[topWinners[0].index]: 0,[topWinners[1].index]: 0 },
         }
-        return votesList
+        return votesList;
     }
 
     var countedVotes = newVotesMap(), currentWinner = null, topCount = 0;
 
-    for (var i=0; i<topWinners.length, i++;) {
-        var iIndex = topWinners[i].index;
-        for (var j=0; j<topWinners.length, j++;) {
-            if (i == j) continue;
-            var jIndex = topWinners[j].index;
+    // console.log(countedVotes);
+
+    var iIndex, jIndex;
+    // console.log(topWinners.length);
+
+
+    for (let first = 0; first < topWinners.length; first++) {
+
+        iIndex = Number(topWinners[first].index);
+        for (let second = 0; second < topWinners.length; second++) {
+
+            if (first === second) continue;
+            jIndex = Number(topWinners[second].index);
+
+            // console.log("iIndex: " + iIndex + ", jIndex: " + jIndex);
 
             votes.forEach(function(vote) {
                 // See who is earlier in the vote sequence
                 // Do we want to test for -1?
+
+
+                // console.log(iIndex + ": " + vote.indexOf(iIndex) + ", " + jIndex + ": " + vote.indexOf(jIndex));
+                // console.log(vote);
+
+
                 if (vote.indexOf(iIndex) < vote.indexOf(jIndex)) {
                     // voter ranked candidate i ahead of j
                     if(++countedVotes[iIndex][jIndex] >= topCount) {
@@ -442,18 +459,29 @@ function powerInstantRunoff(votes, candidates, maxWinners) {
         }
     }
 
+    // console.log(countedVotes);
+
     // returns the winner index if there is a Condorcet winner, else null
     function findCondorcetWinner(voteMap) {
 
         // console.log(voteMap);
 
+        if (Object.keys(voteMap).length < 3) {
+            voteMap[-1] = {[100]: 0, [101]:0}
+        }
+
         var cWinner = null;
         var keys = Object.keys(voteMap);
+
+        // console.log(keys);
+
         for (var i=0; i<3; i++) {
             if (voteMap[keys[0]][keys[1]] > voteMap[keys[1]][keys[0]] &&
                 voteMap[keys[0]][keys[2]] > voteMap[keys[2]][keys[0]]) {
-                cWinner = [key];
+
+                cWinner = [ keys[0] ];
                 break;
+
             }
             keys.push(keys.shift());
         }
